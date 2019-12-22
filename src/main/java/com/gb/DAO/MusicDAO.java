@@ -9,6 +9,6 @@ public interface MusicDAO {
 
     Music getMusicById(long id);
 
-
+    int addOneMusic(Music music);
 
 }
