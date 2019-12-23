@@ -1,6 +1,8 @@
 package com.gb.DAO;
 
 import com.gb.modelObject.Music;
+import com.gb.modelObject.SearchFilter;
+
 import java.util.List;
 
 public interface MusicDAO {
@@ -8,9 +10,8 @@ public interface MusicDAO {
     /**
      * GET /music
      * GET su collezione --> Restituisce l'intera collezione
-     * TODO: Paginazione? start, end per definire LIMIT / OFFSET
      */
-    List<Music> getAllMusic();
+    List<Music> getAllMusic(int page);
 
     /**
      * GET /music/:id
@@ -23,9 +24,24 @@ public interface MusicDAO {
      * GET su collezione con parametri --> Restituisce una rappresentazione
      * delle risorse con determinati parametri.
      */
-    List<Music> getMusicByParams(Object... params);
+    List<Music> getMusicByParams(SearchFilter filter, int page);
 
-    //TODO: GET su attributo/i di risorsa --> Implementare?
+    /**
+     * GET su attributo/i di risorsa --> Non implementato. Scelta di progetto
+     * legata alla decisione di restituire un certo formato di JSON sempre uguale
+     */
+
+    /**
+     * PUT /music
+     * PUT su collezione --> Aggiunge elementi alla collezione
+     */
+    int addManyMusic(List<Music> musicList);
+
+    /**
+     * PUT /music/:id
+     * PUT su risorsa --> Aggiorna la risorsa
+     */
+    int updateOneMusic(Music music);
 
     /**
      * POST /music
@@ -36,14 +52,6 @@ public interface MusicDAO {
     /**
      * POST su risorsa --> Non implementato. Generalmente non fatto
      */
-
-    //TODO: PUT su collezione --> Rimpiazzare l'intera collezione o aggiungere elementi??? In ogni caso mettere autoCommit a false
-
-    /**
-     * PUT /music/:id
-     * PUT su risorsa --> Aggiorna la risorsa
-     */
-    int updateOneMusic(Music music);
 
     /**
      * DELETE su collezione --> Non implementato.
