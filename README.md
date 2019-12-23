@@ -1,4 +1,5 @@
 # Progetto per l'esame di Progetto di Sistemi Web - Backend ReST
+![](logo.png)
 ## Introduzione
 Questa è la parte backend del mio progetto, e si occupa di fornire un servizio ReST.\
 Il servizio permette ai client di effettuare operazioni CRUD su una base dati di canzoni.
