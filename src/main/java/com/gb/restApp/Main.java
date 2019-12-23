@@ -67,9 +67,34 @@ public class Main {
 
         notFound(Main::handleNotFound);
 
+
+        options("/*", Main::allowCORS);
+
+
+    }
+
+    private static String allowCORS(Request req, Response res) {
+        String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
+        if (accessControlRequestHeaders != null) {
+            res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+        }
+
+        String accessControlRequestMethod = req.headers("Access-Control-Request-Method");
+        if (accessControlRequestMethod != null) {
+            res.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+        }
+        return "OK";
     }
 
     private static void applyFilters(Request req, Response res) {
+        /**
+         * Permette il CORS (Cross Origin Resource Sharing).
+         * Se non è permesso, il server blocca le richieste
+         * del client Angular, che gira sulla porta 4200.
+         */
+        res.header("Access-Control-Allow-Origin" , "*");
+        res.header("Access-Control-Allow-Headers", "*");
+
         /**
          * Toglie lo slash finale, se presente.
          * Il redirect funziona solamente con richieste GET,
