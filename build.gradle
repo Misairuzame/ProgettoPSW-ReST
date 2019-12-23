@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-version '1.0-SNAPSHOT'
+version '1.0'
 
 sourceCompatibility = 1.8
 
@@ -25,3 +25,13 @@ dependencies {
 
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'ProgettoPSW-REST',
+                'Main-Class': 'com.gb.restApp.Main'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
