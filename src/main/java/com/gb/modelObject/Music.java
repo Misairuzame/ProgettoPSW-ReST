@@ -1,6 +1,16 @@
 package com.gb.modelObject;
 
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Music {
+
+    private static final Logger logger = LoggerFactory.getLogger(Music.class);
+
     private long id;
     private String title;
     private String author;
@@ -9,8 +19,7 @@ public class Music {
     private String genre;
     private String url;
 
-    public Music() {
-    }
+    public Music() { }
 
     public Music(long id, String title, String author, String album, int year, String genre, String url) {
         this.id = id;
@@ -20,6 +29,31 @@ public class Music {
         this.year = year;
         this.genre = genre;
         this.url = url;
+    }
+
+    public Music(ResultSet rs) {
+        try {
+            setId(      rs.getLong(  1) );
+            setTitle(   rs.getString(2) );
+            setAuthor(  rs.getString(3) );
+            setAlbum(   rs.getString(4) );
+            setYear(    rs.getInt(   5) );
+            setGenre(   rs.getString(6) );
+            setUrl(     rs.getString(7) );
+        } catch(SQLException e) {
+            logger.error("Error creating Music object: {}", e.getMessage());
+        }
+    }
+
+    public JSONObject getJson() {
+        return new JSONObject()
+                .put("id", getId())
+                .put("title", getTitle())
+                .put("author", getAuthor())
+                .put("album", getAlbum())
+                .put("year", getYear())
+                .put("genre", getGenre())
+                .put("url", getUrl());
     }
 
     public long getId() {
@@ -77,4 +111,5 @@ public class Music {
     public void setUrl(String url) {
         this.url = url;
     }
+
 }
