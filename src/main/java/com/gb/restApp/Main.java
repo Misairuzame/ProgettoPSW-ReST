@@ -207,7 +207,7 @@ public class Main {
 
         String msg;
         if (musicList.isEmpty()) {
-            msg = "La lista di musica in questa pagina e' vuota.";
+            return handleNotFound(req, res);
         } else msg = "Lista contenente musica sul database (pagina "+pageNum+").";
 
         res.status(SC_OK);

@@ -120,28 +120,28 @@ public class SQLiteJDBCImpl implements MusicDAO {
         int index = 0;
 
         String sql = " SELECT * FROM " + TABLE_NAME + " WHERE ";
-        if(filter.getTitle() != null) {
-            sql += TITLE + " = ? AND ";
+        if(filter.getTitle() != null && !filter.getTitle().equals("")) {
+            sql += TITLE + " LIKE ? AND ";
             params[index] = true;
         }
         index++;
-        if(filter.getAuthor() != null) {
-            sql += AUTHOR + " = ? AND ";
+        if(filter.getAuthor() != null && !filter.getAuthor().equals("")) {
+            sql += AUTHOR + " LIKE ? AND ";
             params[index] = true;
         }
         index++;
-        if(filter.getAlbum() != null) {
-            sql += ALBUM + " = ? AND ";
+        if(filter.getAlbum() != null && !filter.getAlbum().equals("")) {
+            sql += ALBUM + " LIKE ? AND ";
             params[index] = true;
         }
         index++;
-        if(filter.getYear() != null) {
+        if(filter.getYear() != null && !filter.getYear().equals("")) {
             sql += YEAR + " = ? AND ";
             params[index] = true;
         }
         index++;
-        if(filter.getGenre() != null) {
-            sql += GENRE + " = ? AND ";
+        if(filter.getGenre() != null && !filter.getGenre().equals("")) {
+            sql += GENRE + " LIKE ? AND ";
             params[index] = true;
         }
         sql = sql.substring(0, sql.lastIndexOf("AND "));
@@ -153,19 +153,19 @@ public class SQLiteJDBCImpl implements MusicDAO {
                 if(params[j]) {
                     switch (j) {
                         case 0:
-                            ps.setString(i, filter.getTitle());
+                            ps.setString(i, "%"+filter.getTitle()+"%");
                             break;
                         case 1:
-                            ps.setString(i, filter.getAuthor());
+                            ps.setString(i, "%"+filter.getAuthor()+"%");
                             break;
                         case 2:
-                            ps.setString(i, filter.getAlbum());
+                            ps.setString(i, "%"+filter.getAlbum()+"%");
                             break;
                         case 3:
                             ps.setInt(i, Integer.parseInt(filter.getYear()));
                             break;
                         case 4:
-                            ps.setString(i, filter.getGenre());
+                            ps.setString(i, "%"+filter.getGenre()+"%");
                             break;
                     }
                     i++;
