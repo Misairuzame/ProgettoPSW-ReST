@@ -113,11 +113,8 @@ public class SQLiteJDBCImpl implements MusicDAO {
 
         List<Music> musicList = new ArrayList<>();
 
-        boolean[] params = new boolean[5];
-        for(int i=0; i<params.length; i++) {
-            params[i] = false;
-        }
-        int index = 0;
+        boolean[] params = new boolean[5];  /* Non serve inizializzare tutti gli elementi a false, */
+        int index = 0;                      /* lo sono già di default al momento della creazione.  */
 
         String sql = " SELECT * FROM " + TABLE_NAME + " WHERE ";
         if(filter.getTitle() != null && !filter.getTitle().equals("")) {

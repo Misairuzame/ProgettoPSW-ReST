@@ -16,7 +16,7 @@ il formato dei record nella base dati:
         "title" : string,
         "author": string,
         "album" : string,
-        "year"  : string,
+        "year"  : number,
         "genre" : string,
         "url"   : string
     }
@@ -44,15 +44,15 @@ specificata). La richiesta con specificazione della pagina avrà quindi la segue
 
 ## Richieste possibili
 
-    GET  /music
+    GET  /music             --> Di default, la pagina è 0
     GET  /music/:id
     GET  /music?page=<page>
     GET  /music?[page=<page>][&title=<title>][&author=<author>]
                ↪[&album=<album>][&year=<year>][&genre=<genre>]
     GET  /music/<attributo> --> Non implementato, scelta di progetto
-    PUT  /music
-    PUT  /music/:id
-    POST /music
-    POST /music/:id --> Non implementato, generalmente non fatto
-    DELETE /music   --> Restituisce sempre 403 Forbidden
-    DELETE /music/:id
+    PUT  /music             --> Aggiunge più musiche
+    PUT  /music/:id         --> Modifica una musica
+    POST /music             --> Aggiunge una musica
+    POST /music/:id         --> Non implementato, generalmente non fatto
+    DELETE /music           --> Restituisce sempre 403 Forbidden
+    DELETE /music/:id       --> Elimina una musica

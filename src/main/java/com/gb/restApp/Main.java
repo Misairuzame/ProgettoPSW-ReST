@@ -7,6 +7,7 @@ import com.gb.modelObject.SearchFilter;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,9 +68,7 @@ public class Main {
 
         notFound(Main::handleNotFound);
 
-
         options("/*", Main::allowCORS);
-
 
     }
 
@@ -150,9 +149,25 @@ public class Main {
         return jsonString;
     }
 
+    private static String handleUnsupportedMediaType(Request req, Response res) {
+        res.status(SC_UNSUPPORTED_MEDIA_TYPE);
+        String jsonString = formatMessage("Il media type specificato non e' supportato.",
+                SC_UNSUPPORTED_MEDIA_TYPE, FAILURE);
+        info(jsonString);
+        return jsonString;
+    }
+
+    private static String handleGsonError(Request req, Response res) {
+        res.status(SC_BAD_REQUEST);
+        String jsonString = formatMessage("Errore nella deserializzazione del JSON inviato.",
+                SC_BAD_REQUEST, FAILURE);
+        info(jsonString);
+        return jsonString;
+    }
+
     private static String getHomepage(Request req, Response res) {
         res.status(SC_OK);
-        String jsonString = formatMessage("Benvenuto nella ReST API Music.",
+        String jsonString = formatMessage("Benvenuto nella ReST API MusicService.",
                 SC_OK, SUCCESS);
         info(jsonString);
         return jsonString;
@@ -246,10 +261,7 @@ public class Main {
 
     private static String addOne(Request req, Response res) {
         if(req.contentType() == null || !req.contentType().equals(APPLICATION_JSON)) {
-            res.status(SC_UNSUPPORTED_MEDIA_TYPE);
-            String jsonString = formatMessage("Unsupported media type.", SC_UNSUPPORTED_MEDIA_TYPE, FAILURE);
-            info(jsonString);
-            return jsonString;
+            return handleUnsupportedMediaType(req, res);
         }
 
         SQLiteJDBCImpl db = SQLiteJDBCImpl.getInstance();
@@ -257,7 +269,13 @@ public class Main {
             return handleInternalError(req, res);
         }
 
-        Music musicToAdd = new Gson().fromJson(req.body(), Music.class);
+        Music musicToAdd;
+        try {
+            musicToAdd = new Gson().fromJson(req.body(), Music.class);
+        } catch(JsonSyntaxException e) {
+            logger.error("Errore nella deserializzazione del JSON: "+e.getMessage());
+            return handleGsonError(req, res);
+        }
         if(musicToAdd == null) {
             return handleInternalError(req, res);
         }
@@ -284,10 +302,7 @@ public class Main {
 
     private static String addMany(Request req, Response res) {
         if(req.contentType() == null || !req.contentType().equals(APPLICATION_JSON)) {
-            res.status(SC_UNSUPPORTED_MEDIA_TYPE);
-            String jsonString = formatMessage("Unsupported media type.", SC_UNSUPPORTED_MEDIA_TYPE, FAILURE);
-            info(jsonString);
-            return jsonString;
+            return handleUnsupportedMediaType(req, res);
         }
 
         SQLiteJDBCImpl db = SQLiteJDBCImpl.getInstance();
@@ -295,8 +310,14 @@ public class Main {
             return handleInternalError(req, res);
         }
 
-        Type listType = new TypeToken<List<Music>>() {}.getType();
-        List<Music> musicToAdd = new Gson().fromJson(req.body(), listType);
+        List<Music> musicToAdd;
+        try {
+            Type musicListType = new TypeToken<List<Music>>(){}.getType();
+            musicToAdd = new Gson().fromJson(req.body(), musicListType);
+        } catch(JsonSyntaxException e) {
+            logger.error("Errore nella deserializzazione del JSON: "+e.getMessage());
+            return handleGsonError(req, res);
+        }
         if(musicToAdd == null) {
             return handleInternalError(req, res);
         }
@@ -316,10 +337,7 @@ public class Main {
 
     private static String updateOne(Request req, Response res) {
         if(req.contentType() == null || !req.contentType().equals(APPLICATION_JSON)) {
-            res.status(SC_UNSUPPORTED_MEDIA_TYPE);
-            String jsonString = formatMessage("Unsupported media type.", SC_UNSUPPORTED_MEDIA_TYPE, FAILURE);
-            info(jsonString);
-            return jsonString;
+            return handleUnsupportedMediaType(req, res);
         }
 
         SQLiteJDBCImpl db = SQLiteJDBCImpl.getInstance();
@@ -327,7 +345,13 @@ public class Main {
             return handleInternalError(req, res);
         }
 
-        Music musicToUpdate = new Gson().fromJson(req.body(), Music.class);
+        Music musicToUpdate;
+        try {
+            musicToUpdate = new Gson().fromJson(req.body(), Music.class);
+        } catch(JsonSyntaxException e) {
+            logger.error("Errore nella deserializzazione del JSON: "+e.getMessage());
+            return handleGsonError(req, res);
+        }
         if(musicToUpdate == null) {
             return handleInternalError(req, res);
         }
@@ -411,7 +435,7 @@ public class Main {
                 in = new BufferedInputStream(new FileInputStream(".\\favicon.ico"));
                 out = new BufferedOutputStream(res.raw().getOutputStream());
                 res.raw().setContentType("image/x-icon");
-                res.status(200);
+                res.status(SC_OK);
                 ByteStreams.copy(in, out);
                 out.flush();
                 return "";
