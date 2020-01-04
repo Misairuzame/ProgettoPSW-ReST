@@ -2,7 +2,8 @@
 ![](logo.png)
 ## Introduzione
 Questa è la parte backend del mio progetto, e si occupa di fornire un servizio ReST.\
-Il servizio permette ai client di effettuare operazioni CRUD su una base dati di canzoni.
+Il servizio permette ai client di effettuare operazioni CRUD su una base dati di canzoni.\
+Ciò è stato implementato tramite il framework SparkJava.
 ## Metodo per l'integrazione dei sistemi
 Il backend fornisce output JSON, sia per le operazioni di GET che per le altre operazioni (in quest'ultimo
 caso, il JSON conterrà informazioni sull'esito della richiesta). Il frontend consumerà il servizio ReST
@@ -56,3 +57,16 @@ specificata). La richiesta con specificazione della pagina avrà quindi la segue
     POST /music/:id         --> Non implementato, generalmente non fatto
     DELETE /music           --> Restituisce sempre 403 Forbidden
     DELETE /music/:id       --> Elimina una musica
+
+## Dipendenze
+
+    SparkJava Framework --> Framework utilizzato
+    SLF4J-API/-SIMPLE --> Per il logging
+    Apache HttpComponents --> Per le costanti che rappresentano gli stati HTTP
+    JAX WS-RS --> Per le costanti che rappresentano i Media Type
+    Org.Json --> Per la manipolazione del JSON
+    GSON --> Per la deserializzazione del JSON
+    SQLite-JDBC --> Per il database
+    Guava --> Metodi I/O per fornire l'iconcina "favicon.ico"
+    
+Per la versione delle dipendenze utilizzare consultare il file build.gradle.
