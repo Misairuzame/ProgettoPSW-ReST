@@ -22,7 +22,7 @@ il formato dei record nella base dati:
         "url"   : string
     }
     
-Per quanto riguarda il JSON fornito come risposta, si definito il seguente formato:
+Per quanto riguarda il JSON fornito come risposta, si è definito il seguente formato:
 
     {
         "httpStatus"    : number,

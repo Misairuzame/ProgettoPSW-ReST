@@ -73,6 +73,9 @@ public class Main {
     }
 
     private static String allowCORS(Request req, Response res) {
+        /**
+         * Cross-Origin Resource Sharing
+         */
         String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
         if (accessControlRequestHeaders != null) {
             res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
